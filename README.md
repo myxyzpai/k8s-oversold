@@ -27,8 +27,9 @@ docker build -t k8s-oversold:1.0 . ###构建镜像
 docker tag k8s-oversold:1.0   xxxx/k8s-oversold:1.0
 docker push  xxxx/k8s-oversold:1.0
 kubectl create ns oversold  ###创建命名空间
-sh deploy/cfssl/create.sh ###生成密钥
-cd deploy/mutatingwebhook/
+cd deploy/cfssl
+sh create.sh ###生成密钥
+cd ../mutatingwebhook/
 kubectl apply -f . ###在k8s集群中部署
 ### 镜像替换
 kubectl set image deployment mutating-webhook goadmission=xxxx/k8s-oversold:1.0 -n oversold
