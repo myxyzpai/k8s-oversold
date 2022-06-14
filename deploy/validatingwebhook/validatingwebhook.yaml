@@ -1,0 +1,22 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: "validating-webhook.mritd.me"
+webhooks:
+  - name: "validating-webhook.mritd.me"
+    rules:
+      - apiGroups:   ["apps"]
+        apiVersions: ["v1"]
+        operations:  ["CREATE","UPDATE"]
+        resources:   ["deployments"]
+        scope:       "Namespaced"
+    clientConfig:
+      service:
+        name: "validating-webhook"
+        namespace: "oversold"
+        path: /validating/check-deploy
+      caBundle: ${CA_BUNDLE}
+    admissionReviewVersions: ["v1", "v1beta1"]
+    sideEffects: None
+    timeoutSeconds: 5
+    failurePolicy: Ignore
