@@ -22,10 +22,10 @@
 
 ```bash
 cd k8s-oversold
-docker build -t k8s-oversold:1.0 . ###构建镜像
+docker build -t k8s-oversold:1.1 . ###构建镜像
 ##docker login 上传镜像到镜像仓库 xxxx请自行替换为镜像仓库地址
-docker tag k8s-oversold:1.0   xxxx/k8s-oversold:1.0
-docker push  xxxx/k8s-oversold:1.0
+docker tag k8s-oversold:1.1   xxxx/k8s-oversold:1.1
+docker push  xxxx/k8s-oversold:1.1
 kubectl create ns oversold  ###创建命名空间
 cd deploy/cfssl
 sh create.sh ###生成密钥
@@ -38,10 +38,10 @@ kubectl set image deployment mutating-webhook goadmission=xxxx/k8s-oversold:1.0 
 # 四、如何开启
 
  ```shell
- kubectl label --overwrite node --all kubernetes.io/oversold=oversold  
- kubectl label --overwrite node --all kubernetes.io/overcpu=3 ###cpu超卖倍数4倍，支持浮点数
- kubectl label --overwrite node --all kubernetes.io/overmem=2 ###内存超卖倍数2倍，支持浮点数
- kubectl label --overwrite node --all kubernetes.io/overpods=2 ###pods超卖倍数2倍，支持浮点数
+ kubectl label --overwrite node --all oversold=oversold  
+ kubectl label --overwrite node --all overcpu=3 ###cpu超卖倍数3倍，支持浮点数
+ kubectl label --overwrite node --all overmem=2 ###内存超卖倍数2倍，支持浮点数
+ kubectl label --overwrite node --all overpods=2 ###pods超卖倍数2倍，支持浮点数
  ##使用共有云的K8S服务,如EKS,默认pods节点有限制,同时IP分配也有限制,如需突破限制使用如下命令
 ##详细请参考:https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/cni-increase-ip-addresses.html
 kubectl set env daemonset aws-node -n kube-system ENABLE_PREFIX_DELEGATION=true

@@ -37,7 +37,7 @@ func oversold(request *admissionv1.AdmissionRequest) (*admissionv1.AdmissionResp
 				},
 			}, nil
 		}
-		if node.Labels["kubernetes.io/oversold"] != "oversold" {
+		if node.Labels["oversold"] != "oversold" {
 
 			return &admissionv1.AdmissionResponse{
 				Allowed:   true,
@@ -49,23 +49,23 @@ func oversold(request *admissionv1.AdmissionRequest) (*admissionv1.AdmissionResp
 			}, nil
 		}
 
-		klog.Info(request.UserInfo.Username + "的label为kubernetes.io/oversold:" + node.Labels["kubernetes.io/oversold"])
+		klog.Info(request.UserInfo.Username + "的label为oversold:" + node.Labels["oversold"])
 		klog.Info(request.UserInfo.Username + "===================该节点允许超售========================")
 		patches := []Patch{
 			{
 				Option: PatchOptionReplace,
 				Path:   "/status/allocatable/cpu",
-				Value:  overcpu(Quantitytostring(node.Status.Capacity.Cpu()), node.Labels["kubernetes.io/overcpu"]),
+				Value:  overcpu(Quantitytostring(node.Status.Capacity.Cpu()), node.Labels["overcpu"]),
 			},
 			{
 				Option: PatchOptionReplace,
 				Path:   "/status/allocatable/memory",
-				Value:  overmem(Quantitytostring(node.Status.Allocatable.Memory()), node.Labels["kubernetes.io/overmem"]),
+				Value:  overmem(Quantitytostring(node.Status.Allocatable.Memory()), node.Labels["overmem"]),
 			},
 			{
 				Option: PatchOptionReplace,
 				Path:   "/status/allocatable/pods",
-				Value:  overpods(Quantitytostring(node.Status.Capacity.Pods()), node.Labels["kubernetes.io/overpods"]),
+				Value:  overpods(Quantitytostring(node.Status.Capacity.Pods()), node.Labels["overpods"]),
 			},
 		}
 		patch, err := jsoniter.Marshal(patches)
